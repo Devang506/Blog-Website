@@ -8,10 +8,19 @@
   },
   "author": "",
   "license": "ISC",
+  "engines":{
+    "node" : "16.15.1",
+    "npm" : "8.11.0"
+
+  },
+  "scripts": {
+      "start": "node app.js"
+  },
   "dependencies": {
     "body-parser": "^1.18.3",
     "ejs": "^2.6.1",
     "express": "^4.16.3",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "mongoose": "^6.4.2"
   }
 }
