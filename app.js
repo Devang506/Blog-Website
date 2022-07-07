@@ -18,7 +18,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 // coonnecting to database
-mongoose.connect("mongodb+srv://Devangjoshi1210:<Devang12345>@atlascluster.kmp6b.mongodb.net/blogDBv2");
+mongoose.connect("mongodb+srv://Devangjoshi1210:Devang12345@atlascluster.kmp6b.mongodb.net/blogDBv2");
 
  // creating Schema
  const postSchema = new mongoose.Schema({
