@@ -1,18 +1,19 @@
 
 <%- include("partials/header"); %>
 <h2> Compose </h2>
+<hr>
 <form  action="/compose" method="post">
   <div class="form-group">
-    <label ><b>Display Name</b></label>
+    <label <b>Display Name</b></label>
      <input type="text" name="displayName" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-  <label ><b>Title</b></label>
+  <label <b>Title</b></label>
    <input type="text" name="postTitle" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
    </div>
   <div class="form-group">
-  <label for = "textarea"><b>Post</b></label>
+  <label for = "textarea"  <b>Post</b></label>
   <textarea class="form-control z-depth-1 textarea" id="exampleFormControlTextarea6"   name="postBody" rows="5" cols="80" placeholder="Write something here..."></textarea>
   </div>
-  <button class="btn btn-primary" type="submit" name="button">Publish</button>
+  <button class="btn btn-dark btn-lg" type="submit" name="button">Publish</button>
 
 </form>
 
