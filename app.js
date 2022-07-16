@@ -14,8 +14,6 @@ const {body, checkSchema, validationResult} = require("express-validator");
 const findOrCreate = require("mongoose-find-or-create");
 let alert = require('alert');
 
-const aboutContent = "Hac habitasse platea dictumst vestibulum rhoncus est pellentesque. Dictumst vestibulum rhoncus est pellentesque elit ullamcorper. Non diam phasellus vestibulum lorem sed. Platea dictumst quisque sagittis purus sit. Egestas sed sed risus pretium quam vulputate dignissim suspendisse. Mauris in aliquam sem fringilla. Semper risus in hendrerit gravida rutrum quisque non tellus orci. Amet massa vitae tortor condimentum lacinia quis vel eros. Enim ut tellus elementum sagittis vitae. Mauris ultrices eros in cursus turpis massa tincidunt dui.";
-const contactContent = "Scelerisque eleifend donec pretium vulputate sapien. Rhoncus urna neque viverra justo nec ultrices. Arcu dui vivamus arcu felis bibendum. Consectetur adipiscing elit duis tristique. Risus viverra adipiscing at in tellus integer feugiat. Sapien nec sagittis aliquam malesuada bibendum arcu vitae. Consequat interdum varius sit amet mattis. Iaculis nunc sed augue lacus. Interdum posuere lorem ipsum dolor sit amet consectetur adipiscing elit. Pulvinar elementum integer enim neque. Ultrices gravida dictum fusce ut placerat orci nulla. Mauris in aliquam sem fringilla ut morbi tincidunt. Tortor posuere ac ut consequat semper viverra nam libero.";
 
 const app = express();
 
@@ -74,6 +72,14 @@ const postSchema = new mongoose.Schema({
   content:String,
   id : String
 });
+const contactSchema = new mongoose.Schema({
+
+  name : String,
+  email:String,
+  subject:String,
+  message : String,
+  id : String
+});
 //creating model
 
 
@@ -82,6 +88,7 @@ userSchema.plugin(findOrCreate);
 
 const User = new mongoose.model("User",userSchema);
 const Post = mongoose.model("Post", postSchema);
+const Contact = mongoose.model("Contact", contactSchema);
 
 const LocalStrategy = require('passport-local').Strategy;
 passport.use(new LocalStrategy(User.authenticate()));
@@ -133,12 +140,12 @@ app.get("/auth/google",
     app.get("/home",function(req,res){
 
       if(req.isAuthenticated()){
-      
+
         Post.find({}, function(err, posts){
 
            res.render("home", {
 
-             startingContent: "",
+             startingContent: req.user.username,
 
              posts: posts,
              userId:req.user.id
@@ -152,11 +159,11 @@ app.get("/auth/google",
 
     })
 app.get("/about",function(req,res){
-  res.render("about", {startingAbout : aboutContent});
+  res.render("about");
 
 })
 app.get("/contact",function(req,res){
-  res.render("contact", {startingContact : contactContent});
+  res.render("contact");
 })
 app.post("/home",function(req,res){
   res.render("compose");
@@ -177,6 +184,28 @@ app.get("/logout",function(req,res,next){
        res.render("landingPage");
    });
 
+})
+app.post("/edit",function(req,res){
+    const postId = req.body.postId;
+    Post.findOne({_id: postId}, function(err, post){
+
+   res.render("edit", {
+     displayName:post.author,
+     postTitle: post.title,
+     postBody: post.content,
+     postId:postId
+
+   });
+
+ });
+})
+app.post("/update",function(req,res){
+
+  Post.findOneAndUpdate({_id: req.body.postId}, {$set:{author:req.body.displayName,content:req.body.postBody,title:req.body.postTitle}}, function(err, post){
+
+   res.redirect("/home");
+
+});
 })
 app.post("/register", checkSchema(registrationSchema),function(req,res){
      const errors = validationResult(req);
@@ -292,6 +321,18 @@ app.post("/delete",function(req,res){
    }
  })
 
+})
+app.post("/contactSubmit",function(req,res){
+         const contact  = new Contact({
+
+           name:req.body.name,
+           email:req.body.email,
+           message:req.body.message,
+           subject:req.body.subject
+         })
+         contact.save();
+         alert("Thanks for contacting us, We will get back to you soon!")
+         res.redirect("/home");
 })
 
 app.listen(process.env.PORT||3000, function() {

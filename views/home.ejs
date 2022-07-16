@@ -1,5 +1,10 @@
  <%- include("partials/header"); %>
-<h1> <i> Hola, NIT Calicut </i> </h1>
+      <%    if(startingContent == null){ %>
+   <h1> <i> Hola, NIT Calicut </i> </h1>
+<%} else { %>
+
+    <h1> <i> Hola, <%= startingContent %></i> </h1>
+  <%}%>
 <br>
 <form action="/home" method="post">
   <button class = "btn btn-dark btn-lg fixedBtn" type="submit" name="button">Create New Blog</button>
@@ -9,27 +14,33 @@
 
 
    <form  action="/delete" method="post">
-        <%  posts.forEach(function(post){  %>
+
+      <%    for(var i = posts.length-1;i>=0;i--){   %>
 
           <div class="panel" >
-               <div class="panel-heading" style = "background-color: #343a40;"> <h2>  <%= post.title %></h2>
+               <div class="panel-heading" style = "background-color: #343a40;"> <h2>  <%= posts[i].title %></h2>
 
 
-          <%    if( userId == post.id){ %>
-                  <button type="submit" name="postId" value =  "<%=post._id%>" class="btnTrash"><i class="fa fa-trash "></i></button>
+          <%    if( userId == posts[i].id){ %>
+
+
+              <button type="submit" formaction="/edit" name="postId" value =  "<%=posts[i]._id%>" class="btnTrash"><i class="fa fa-edit"></i></button>
+
+
+                  <button type="submit" name="postId" value =  "<%=posts[i]._id%>" class="btnTrash"><i class="fa fa-trash "></i></button>
             <%  } %>
 
                 <hr style = "background-color : #645A5A; ">
-                  <p> Published on <b><%=post.date%></b></p>
-                   <p> Written by  <b><%=post.author%></b></p>
+                  <p> Published on <b><%=posts[i].date%></b></p>
+                   <p> Written by  <b><%=posts[i].author%></b></p>
 
 
                  </div>
-                <div class="panel-body"><p class="content" style = "color: #645A5A;"> <%= post.content.substring(0,100)+"..." %>  <a  href="/posts/<%=post._id%>">Read More</a></p></div>
+                <div class="panel-body"><p class="content" style = "color: #645A5A;"> <%= posts[i].content.substring(0,100)+"..." %>  <a  href="/posts/<%=posts[i]._id%>">Read More</a></p></div>
               </div>
 
+            <% } %>
 
-        <% })   %>
          </form>
 
 
