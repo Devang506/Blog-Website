@@ -22,4 +22,7 @@ Preview the website: https://obscure-ridge-54531.herokuapp.com
 ## Database
  - Mongodb
  - Mongoose
+ 
+ ## Security 
+ - Added third-party login in my website using O-Auth 2.0 for Google and used Passport.js for security.
 
